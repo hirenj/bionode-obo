@@ -10,9 +10,6 @@ const charCode = (char) => new Buffer(char)[0]
 
 // Flags and buffers
 let header = true
-let stanzaBuffer = new BufferList()
-
-const skipEmpties = filter(chunk => chunk.length !== 0)
 
 const parseStanza = (stanzaBuffer) => stanzaBuffer
   .toString()
@@ -44,6 +41,7 @@ const parseStanza = (stanzaBuffer) => stanzaBuffer
   }, {})
 
 const parse = (h) => {
+  let stanzaBuffer = new BufferList()
 
   const transform = function (chunk, enc, next) {
     // Line starts with [
@@ -78,6 +76,7 @@ const parse = (h) => {
 }
 
 exports.parse = (h) => {
+  const skipEmpties = filter(chunk => chunk.length !== 0)
   return pumpify(split(), skipEmpties, parse(h))
 }
 
